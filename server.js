@@ -2,7 +2,11 @@ require('dotenv').config();
 const express=require('express'), session=require('express-session'), PgSession=require('connect-pg-simple')(session);
 const {Pool}=require('pg'), bcrypt=require('bcrypt'), helmet=require('helmet'), multer=require('multer');
 const path=require('path'), fs=require('fs'), crypto=require('crypto'), methodOverride=require('method-override');
-const app=express(), pool=new Pool({connectionString:process.env.DATABASE_URL});
+const app = express();
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL
+});
+app.set('trust proxy', 1);
 const PORT=process.env.PORT||3000, UPLOAD_DIR=path.join(__dirname,'uploads');
 if(!fs.existsSync(UPLOAD_DIR))fs.mkdirSync(UPLOAD_DIR,{recursive:true});
 app.use(express.static(path.join(__dirname,'public')));app.set('view engine','ejs');app.set('views',path.join(__dirname,'views'));
