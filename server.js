@@ -51,11 +51,15 @@ app.get('/app/requests/:id', auth, need('request.read'), async (req, res, next) 
         }
 
         const currentUser = userResult.rows[0];
-        const role = normalizeRole(currentUser.role_name);
+                const roleName = String(currentUser.role_name || '').trim().toLowerCase();
 
-        // ตรวจสอบบทบาท Admin และ Manager
+        // รองรับชื่อบทบาทที่ใช้จริงในฐานข้อมูล
         const canViewAll =
-            role === 'admin' || role === 'manager';
+            roleName === 'admin' ||
+            roleName === 'manager' ||
+            roleName === 'ผู้จัดการ';
+
+
 
         // ตรวจสอบว่าเป็นผู้แจ้งหรือช่างที่ได้รับมอบหมายหรือไม่
         const userId = Number(currentUser.id);
